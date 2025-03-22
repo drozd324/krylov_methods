@@ -1,18 +1,18 @@
 import numpy as np
 
 def arnoldi(A, u, m):
-
-	rows, cols = A.shape()
-			
-	a = [A[:, i] for i in range(cols)]
 	
-	Q = np.zeros((m, n))
-	q = [Q[:, i] for i in range(cols)]
+	n, _ = A.shape
 	
-	H = np.zeros((n, n))
-	h = [H[:, i] for i in range(cols)]
+	Q = np.zeros((n, m+1))
+	#q = [Q[:, i] for i in range(m+1)]
+	
+	H = np.zeros((m+1, m))
+	#h = [H[:, i] for i in range(m)]
 
-	for n in range(rows):
+	q[0] = u/np.linalg.norm(u)
+
+	for n in range(m):
 		v = A @ q[n]
 		for j in range(n):
 			h[j][n] = q[j].T @ v
@@ -21,8 +21,8 @@ def arnoldi(A, u, m):
 		h[n+1][n] = np.linalg.norm(v)
 		q[n+1] = v / h[n+1][n]
 
-	Q = np.reshape(np.array(q), (m,n))
-	H = np.reshape(np.array(r), (n,n))
+	Q = np.reshape(np.array(q), (m+1, m+1))
+	H = np.reshape(np.array(r), (m+1, m  ))
 
 	return Q, H
 
