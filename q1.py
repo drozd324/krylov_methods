@@ -24,11 +24,9 @@ u = [+0.757516242460009,
 	 -0.120465395885881 ]
 
 A = np.array(A)
-m = 10
+m = 8
 Q, H = fn.arnoldi(A, u, m)
 
 entry = 8
-#print(Q[:, entry])
-print(Q.shape)
-print(Q)
+print(Q[:, entry])
 

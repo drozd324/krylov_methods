@@ -4,6 +4,7 @@ import functions as fn
 
 n_list = [2**i for i in range(3, 8)]
 rn = []
+x_hist = []
 
 for n in n_list:
 	
@@ -18,8 +19,11 @@ for n in n_list:
 
 	_, r_hist = fn.gmres(A, b, n//2)	
 	rn.append(r_hist[-1]);
-	
-plt.semilogx(n_list, np.array(rn)/np.linalg.norm(b), label=f"n = {n}")
+
+plt.semilogy(n_list, np.array(rn)/np.linalg.norm(b), "o-")
+plt.xlabel("n")
+plt.ylabel(r"$||r_k||_2 \, / \, ||b||_2 $")
+plt.ylim(1e-2, 1e+2)
+plt.savefig("q2_fig", dpi=300)
 plt.show() 
-	
 
