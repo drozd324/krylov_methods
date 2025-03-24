@@ -1,0 +1,68 @@
+gcc -O3 -c serial_gmres.c -lm -lblas -llapacke -llapack   -g -fsanitize=address -Wall -Wextra -lefence 
+serial_gmres.c: In function ‘serial_gmres’:
+serial_gmres.c:33:37: warning: implicit declaration of function ‘sizof’ [-Wimplicit-function-declaration]
+   33 |         double* h = calloc((m+1)*m, sizof(double));
+      |                                     ^~~~~
+serial_gmres.c:33:43: error: expected expression before ‘double’
+   33 |         double* h = calloc((m+1)*m, sizof(double));
+      |                                           ^~~~~~
+serial_gmres.c:34:38: error: expected expression before ‘double’
+   34 |         double* w = malloc(n * sizof(double));
+      |                                      ^~~~~~
+serial_gmres.c:65:24: warning: implicit declaration of function ‘ralloc’; did you mean ‘valloc’? [-Wimplicit-function-declaration]
+   65 |         double* be_1 = ralloc(n, sizeof(double));
+      |                        ^~~~~~
+      |                        valloc
+serial_gmres.c:65:24: warning: initialization of ‘double *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+serial_gmres.c:70:39: warning: passing argument 5 of ‘LAPACKE_dgels’ makes integer from pointer without a cast [-Wint-conversion]
+   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
+      |                                       ^
+      |                                       |
+      |                                       double *
+In file included from serial_gmres.h:2,
+                 from serial_gmres.c:1:
+/usr/include/lapacke.h:633:52: note: expected ‘int32_t’ {aka ‘int’} but argument is of type ‘double *’
+  633 |                           lapack_int n, lapack_int nrhs, double* a,
+      |                                                    ^
+serial_gmres.c:70:43: warning: passing argument 6 of ‘LAPACKE_dgels’ makes pointer from integer without a cast [-Wint-conversion]
+   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
+      |                                          ~^~
+      |                                           |
+      |                                           int
+/usr/include/lapacke.h:633:66: note: expected ‘double *’ but argument is of type ‘int’
+  633 |                           lapack_int n, lapack_int nrhs, double* a,
+      |                                                          ~~~~~~~~^
+serial_gmres.c:70:47: warning: passing argument 7 of ‘LAPACKE_dgels’ makes integer from pointer without a cast [-Wint-conversion]
+   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
+      |                                               ^~~~
+      |                                               |
+      |                                               double *
+/usr/include/lapacke.h:634:38: note: expected ‘int32_t’ {aka ‘int’} but argument is of type ‘double *’
+  634 |                           lapack_int lda, double* b, lapack_int ldb );
+      |                                      ^
+serial_gmres.c:70:53: warning: passing argument 8 of ‘LAPACKE_dgels’ makes pointer from integer without a cast [-Wint-conversion]
+   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
+      |                                                     ^
+      |                                                     |
+      |                                                     int
+/usr/include/lapacke.h:634:51: note: expected ‘double *’ but argument is of type ‘int’
+  634 |                           lapack_int lda, double* b, lapack_int ldb );
+      |                                           ~~~~~~~~^
+serial_gmres.c:70:56: warning: passing argument 9 of ‘LAPACKE_dgels’ makes integer from pointer without a cast [-Wint-conversion]
+   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
+      |                                                        ^~~~
+      |                                                        |
+      |                                                        double *
+/usr/include/lapacke.h:634:65: note: expected ‘int32_t’ {aka ‘int’} but argument is of type ‘double *’
+  634 |                           lapack_int lda, double* b, lapack_int ldb );
+      |                                                                 ^
+serial_gmres.c:70:9: error: too many arguments to function ‘LAPACKE_dgels’
+   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
+      |         ^~~~~~~~~~~~~
+/usr/include/lapacke.h:632:12: note: declared here
+  632 | lapack_int LAPACKE_dgels( int matrix_layout, char trans, lapack_int m,
+      |            ^~~~~~~~~~~~~
+serial_gmres.c:12:45: warning: unused parameter ‘b’ [-Wunused-parameter]
+   12 | void serial_gmres(double* a, int n, double* b, int m, double* x){
+      |                                     ~~~~~~~~^
+make: *** [Makefile:12: serial_gmres.o] Error 1
