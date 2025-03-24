@@ -69,19 +69,21 @@ def back_sub(R, b):
 	return x
 
 
-def gmres(A, b, m):
+def gmres_noiter(A, b, m): # no iter 
 	
 	n = A.shape[1]
 	x = np.zeros(n).T	 
-	r = []
-	r.append(b - A @ x)
+	r_0 = b - A @ x
+	beta = np.linalg.norm(r_0)  
 
-	beta = np.linalg.norm(r[0])  
 	v = np.zeros((n, m+1))
-	v[:, 0] = r / beta
+	v[:, 0] = r_0 / beta
 	
 	h = np.zeros((m+1, m)) 
 	w = np.zeros(n)
+
+	rhs = beta * np.eye(m+1, 1) 
+	y_m = 0
 	
 	for j in range(m):
 		w = A @ v[:, j]
@@ -94,20 +96,23 @@ def gmres(A, b, m):
 			m = j;
 			break
 		v[:, j+1] = w / h[j+1, j]
-	
-	rhs = beta * np.eye(m+1, 1) 
+		
 	Q, R = np.linalg.qr(h)
-	#Q, R = gramschmidt(h)
-	#y_m = np.linalg.solve(R, Q.T @ rhs)
 	y_m = back_sub(R, Q.T @ rhs)
+	r = (np.linalg.norm(h @ y_m - rhs))
 	
-	#y_m = scipy.linalg.lstsq(h, rhs)[0]
-	#print("-----------------------------")
-	#print(y_m)
-	#print("-----------------------------")
-
 	x = x + v[:, :m] @ y_m 
-
-	r.append(A @ x - b)
 	
 	return x, r
+
+def gmres(A, b, m):
+	
+	final_x = 0
+	r_hist = []	
+		
+	for k in range(1, m+1):
+		x, r = gmres_noiter(A, b, k)
+		final_x = x
+		r_hist.append(r)
+	
+	return final_x, r_hist

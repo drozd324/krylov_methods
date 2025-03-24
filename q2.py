@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import functions as fn
 
-n_list = [2**i for i in range(3, 9)]
-rn = []
+n_list = [2**i for i in range(3, 7)]
 
-for n in n_list:
+for n in reversed(n_list):
 	
+	m = n//2
+
 	A = np.zeros((n, n))
 	for i in range(n):
 		A[i, i] = -4
@@ -16,12 +17,17 @@ for n in n_list:
 		
 	b = np.array([(i+1)/n for i in range(n)])
 
-	_, r_hist = fn.gmres(A, b, n//2)	
-	rn.append(r_hist[-1]);
+	_, r = fn.gmres(A, b, m)
+	r_iter = len(r)
+	
+	x = np.arange(1, r_iter+1, 1)
+	y = [np.linalg.norm(r[i]) / np.linalg.norm(b) for i in range(r_iter)]
+	
+	#plt.semilogy(x, y, "o-", label=f"n={n}")
+	plt.loglog(x, y, "o-", label=f"n={n}")
 
-plt.semilogy(n_list, np.array(rn)/np.linalg.norm(b), "o-")
-#plt.loglog(n_list, np.array(rn)/np.linalg.norm(b), "o-")
-plt.xlabel("n")
+plt.legend()
+plt.xlabel("k (iteration)")
 plt.ylabel(r"$||r_k||_2 \, / \, ||b||_2 $")
 #plt.ylim(1e-1, 1e+1)
 plt.savefig("writeup/q2_fig", dpi=300)

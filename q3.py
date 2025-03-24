@@ -21,6 +21,8 @@ print(b)
 print("")
 
 print("x =")
+print(fn.gmres_noiter(A, b, m)[0])
+print("x =")
 print(fn.gmres(A, b, m)[0])
 
 
