@@ -1,3 +1,7 @@
+"""
+sanity test
+"""
+
 import functions as fn
 import numpy as np
 
