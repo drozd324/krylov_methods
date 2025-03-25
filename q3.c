@@ -4,7 +4,7 @@
 
 int main(){
 	
-	int m = 100; //number of itarations
+	int m = 10; //number of itarations
 	int n = 10;
 	double* A = calloc(n*n , sizeof(double));
 	double* b = malloc(n * sizeof(double));
@@ -18,7 +18,7 @@ int main(){
 	}
 	
 	for (int i=0; i<n; i++){
-		b[i] = (i+1)/n; 
+		b[i] = (i+1)/(double)n; 
 	}	
 
 	double* x = calloc(n, sizeof(double));

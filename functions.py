@@ -39,8 +39,13 @@ def gmres_noiter(A, b, m): # no iter
 	r_0 = b - A @ x
 	beta = np.linalg.norm(r_0)  
 
+	print(f"beta = {beta}")
+
 	v = np.zeros((n, m+1))
 	v[:, 0] = r_0 / beta
+	
+	print("v = ")
+	print(v[0])
 	
 	h = np.zeros((m+1, m)) 
 	w = np.zeros(n)
@@ -58,14 +63,21 @@ def gmres_noiter(A, b, m): # no iter
 			m = j;
 			break
 		v[:, j+1] = w / h[j+1, j]
+	
+	print("h = ")
+	print(h[1, :])
 		
-	Q, R = np.linalg.qr(h)
-	y_m = back_sub(R, Q.T @ rhs)
-	r = np.linalg.norm(h @ y_m - rhs)
+	#Q, R = np.linalg.qr(h)
+	#y_m = back_sub(R, Q.T @ rhs)
+	y_m = np.linalg.lstsq(h, rhs, rcond=None)[0]
 	
-	x = x + v[:, :m] @ y_m 
+	print("y_m = ")	
+	print(y_m.T)
+
+	r = np.linalg.norm(h @ y_m - rhs)	
+	x = x + v[:, :m] @ y_m
 	
-	return x, r
+	return x[:, -1], r
 
 def gmres(A, b, m):
 	
