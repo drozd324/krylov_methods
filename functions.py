@@ -50,13 +50,7 @@ def gmres(A, b, m):
 		v[:, j+1] = w / h[j+1, j]
 		
 		y = np.linalg.lstsq(h[:j+2, :j+1], rhs[:j+2], rcond=None)[0]
-
 		x = v[:, :j+1] @ y
 		r.append(b - A @ x)	
-
-	#y = np.linalg.lstsq(h, rhs, rcond=None)[0]
-	#print(f"shape = {y.shape}")
-	#print(f"v = {v.shape}")
-	#x = v[:, :m] @ y
 
 	return x, r
