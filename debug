@@ -1,68 +1,6005 @@
-gcc -O3 -c serial_gmres.c -lm -lblas -llapacke -llapack   -g -fsanitize=address -Wall -Wextra -lefence 
-serial_gmres.c: In function ‘serial_gmres’:
-serial_gmres.c:33:37: warning: implicit declaration of function ‘sizof’ [-Wimplicit-function-declaration]
-   33 |         double* h = calloc((m+1)*m, sizof(double));
-      |                                     ^~~~~
-serial_gmres.c:33:43: error: expected expression before ‘double’
-   33 |         double* h = calloc((m+1)*m, sizof(double));
-      |                                           ^~~~~~
-serial_gmres.c:34:38: error: expected expression before ‘double’
-   34 |         double* w = malloc(n * sizof(double));
-      |                                      ^~~~~~
-serial_gmres.c:65:24: warning: implicit declaration of function ‘ralloc’; did you mean ‘valloc’? [-Wimplicit-function-declaration]
-   65 |         double* be_1 = ralloc(n, sizeof(double));
-      |                        ^~~~~~
-      |                        valloc
-serial_gmres.c:65:24: warning: initialization of ‘double *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
-serial_gmres.c:70:39: warning: passing argument 5 of ‘LAPACKE_dgels’ makes integer from pointer without a cast [-Wint-conversion]
-   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
-      |                                       ^
-      |                                       |
-      |                                       double *
-In file included from serial_gmres.h:2,
-                 from serial_gmres.c:1:
-/usr/include/lapacke.h:633:52: note: expected ‘int32_t’ {aka ‘int’} but argument is of type ‘double *’
-  633 |                           lapack_int n, lapack_int nrhs, double* a,
-      |                                                    ^
-serial_gmres.c:70:43: warning: passing argument 6 of ‘LAPACKE_dgels’ makes pointer from integer without a cast [-Wint-conversion]
-   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
-      |                                          ~^~
-      |                                           |
-      |                                           int
-/usr/include/lapacke.h:633:66: note: expected ‘double *’ but argument is of type ‘int’
-  633 |                           lapack_int n, lapack_int nrhs, double* a,
-      |                                                          ~~~~~~~~^
-serial_gmres.c:70:47: warning: passing argument 7 of ‘LAPACKE_dgels’ makes integer from pointer without a cast [-Wint-conversion]
-   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
-      |                                               ^~~~
-      |                                               |
-      |                                               double *
-/usr/include/lapacke.h:634:38: note: expected ‘int32_t’ {aka ‘int’} but argument is of type ‘double *’
-  634 |                           lapack_int lda, double* b, lapack_int ldb );
-      |                                      ^
-serial_gmres.c:70:53: warning: passing argument 8 of ‘LAPACKE_dgels’ makes pointer from integer without a cast [-Wint-conversion]
-   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
-      |                                                     ^
-      |                                                     |
-      |                                                     int
-/usr/include/lapacke.h:634:51: note: expected ‘double *’ but argument is of type ‘int’
-  634 |                           lapack_int lda, double* b, lapack_int ldb );
-      |                                           ~~~~~~~~^
-serial_gmres.c:70:56: warning: passing argument 9 of ‘LAPACKE_dgels’ makes integer from pointer without a cast [-Wint-conversion]
-   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
-      |                                                        ^~~~
-      |                                                        |
-      |                                                        double *
-/usr/include/lapacke.h:634:65: note: expected ‘int32_t’ {aka ‘int’} but argument is of type ‘double *’
-  634 |                           lapack_int lda, double* b, lapack_int ldb );
-      |                                                                 ^
-serial_gmres.c:70:9: error: too many arguments to function ‘LAPACKE_dgels’
-   70 |         LAPACKE_dgels('N', m+1, m, 1, h, m+1, be_1, 1, work, lwork);
-      |         ^~~~~~~~~~~~~
-/usr/include/lapacke.h:632:12: note: declared here
-  632 | lapack_int LAPACKE_dgels( int matrix_layout, char trans, lapack_int m,
-      |            ^~~~~~~~~~~~~
-serial_gmres.c:12:45: warning: unused parameter ‘b’ [-Wunused-parameter]
-   12 | void serial_gmres(double* a, int n, double* b, int m, double* x){
-      |                                     ~~~~~~~~^
-make: *** [Makefile:12: serial_gmres.o] Error 1
+serial_gmres
+r_0 = 
+0.100000, 0.200000, 0.300000, 0.400000, 0.500000, 0.600000, 0.700000, 0.800000, 0.900000, 1.000000, 
+
+w = 
+0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 
+
+w = 
+-0.101929, -0.203859, -0.305788, -0.407718, -0.509647, -0.611577, -0.713506, -0.815436, -0.917365, -1.579906, 
+
+w = 
+0.014561, 0.029123, 0.043684, 0.058245, 0.072807, 0.087368, 0.101929, 0.116491, 0.131052, -0.414998, 
+
+w = 
+-0.399808, -0.810219, 19.748541, 20.569468, -673.456121, -511.752066, 20013.375074, 12546.195453, 675813.762377, -3578071.508174, 
+
+w = 
+74551841651.573181, -689121640894.162964, -4831883058246.067383, 30130802010003.968750, 176151589277217.187500, -988630827386012.500000, -5394451559300124.000000, 28834047196076408.000000, 151713590916991936.000000, 2246948915217698304.000000, 
+
+w = 
+689122396489.140137, 21765300935699496685774793867264.000000, 611373680133144257005056093204482109445722188283904.000000, 16100167620974383530832133324195511377889576965355230775326979792044032.000000, 407029386529844264012480502758856943965215460322015517501637292598754538121176998500892672.000000, 10004299843195777111069680850395700367615876769142065377043492561113569400475973008407794077058553584218537984.000000, 240875590449683434865152654995792574701577990865667923509587890951271453393908379622323738517234976532036243083759762988528041984.000000, 5708992339330491446464637871732234380580941777641301884618998864961295142739178897443768230780839374055848693680102788461866471069265143887011250176.000000, -380869290044596297027319238667581091719036818706850954393273573305639286774687434029561471114367162381737228709853465797262092345318705494419315538246873285465231851520.000000, 1523477160178385188109276954670324366876147274827403817573094293222557147098749736118245884457468649526948914839413863189048369381274821977677262152987493141860927406080.000000, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+w = 
+nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, 
+
+-nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, -nan, 

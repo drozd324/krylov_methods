@@ -5,7 +5,7 @@ sanity test
 import functions as fn
 import numpy as np
 
-m = 10
+m = 100
 n = 10
 A = np.zeros((n, n))
 for i in range(n):
@@ -24,7 +24,7 @@ b = np.array([(1+i)/n for i in range(n)])
 #print(b)
 #print("")
 #
-x = fn.gmres_noiter(A, b, m)[0]  
+x = fn.gmres(A, b, m)[0]  
 print("x =")
 print(x)
 

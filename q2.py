@@ -18,19 +18,16 @@ for n in reversed(n_list):
 	b = np.array([(i+1)/n for i in range(n)])
 
 	_, r = fn.gmres(A, b, m)
-	r_iter = len(r)
 	
-	k = np.arange(1, r_iter+1, 1)
-	y = [np.linalg.norm(r[i]) / np.linalg.norm(b) for i in range(r_iter)]
-	#y = [np.linalg.norm(r[i]) for i in range(r_iter)]
+	k = np.arange(1, len(r)+1, 1)
+	y = [np.linalg.norm(r_i) / np.linalg.norm(b) for r_i in r]
 	
 	plt.semilogy(k, y, label=f"n={n}")
-	#plt.loglog(x, y, "o-", label=f"n={n}")
 
+#k = np.arange(1, (n_list[-1]//2) + 1, 1)
+#plt.semilogy(k, 1/(k**10), 'o-')
 plt.legend()
 plt.xlabel("k (iteration)")
 plt.ylabel(r"$||r_k||_2 \, / \, ||b||_2 $")
-#plt.ylim(1e-1, 1e+1)
 plt.savefig("writeup/q2_fig", dpi=300)
-plt.show() 
-
+plt.show()

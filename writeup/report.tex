@@ -23,13 +23,11 @@
 	
 	For the serial implementation of GMRES in python I chose to follow Algorithm 6.9 from 
 	\textit{Iterative Methods for Sparse Linear Systems by Yousef Saad}. For solving the 
-	minimization problem in line 12 I used a QR factorisation algorithm (modified gram schmidt)
-	I wrote last semester for another module, which was then followed by a back substitution 
-	function.
+	minimization problem in line 12 I used a least squares solver taken form the numpy 
+	library.
 
 	Figure \ref{fig:q2_fig} shows for $n = 8, 16, 32, 64, 128, 256$ the serial gmres function run
-	for $m = n/2$ iterations. In this plot we can see that the convergence rate of my gmres function
-	is for a loglog plot almost a straight line which lets us conlude that that 
+	for $m = n/2$ iterations. In this plot we can see that residual of the 
 
 	$$\frac{||r_k||_2}{||b||_2} \propto n^{-a}$$
 

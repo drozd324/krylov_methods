@@ -1,10 +1,10 @@
 #include "serial_gmres.h"
+#include "parallel_gmres.h"
 #include <stdio.h>
-//#include "parallel_gmres.h"
 
 int main(){
 	
-	int m = 10; //number of itarations
+	int m = 1000; //number of itarations
 	int n = 10;
 	double* A = calloc(n*n , sizeof(double));
 	double* b = malloc(n * sizeof(double));
@@ -21,18 +21,17 @@ int main(){
 		b[i] = (i+1)/(double)n; 
 	}	
 
-	double* x = calloc(n, sizeof(double));
+	double* serial_x  = calloc(n, sizeof(double));
 		
-	serial_gmres(A, n, b, m, x);
-			
-
+	printf("serial_gmres\n");
+	serial_gmres(A, n, b, m, serial_x);
 	for (int i=0; i<n; i++)
-		printf("%lf, ", x[i]);
+		printf("%lf, ", serial_x[i]);
 	printf("\n");
 
 	free(A);
 	free(b);
-	free(x);
+	free(serial_x);
 		
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include "serial_gmres.h"
 
-void print_vec(int n, double* v){
+void print_vec(double* v, int n){
 	for (int i=0; i<n; i++){
 		printf("%lf, ", v[i]);
 	}
@@ -19,70 +19,52 @@ void print_vec(int n, double* v){
 */	
 void serial_gmres(double* a, int n, double* b, int m, double* x){
 	
-	// writes r = b - Ax
-	double* r = calloc(n , sizeof(double));
-	//memcpy(r, b, n);
-	
-	for (int i=0; i<n; i++){
-		r[i] = b[i];
-	}
-
-	printf("r, b = \n");
-	print_vec(n, r);
-	print_vec(n, b);
-	
-	
+	// writes r_0 = b - Ax
+	double* r_0 = calloc(n , sizeof(double));
+	memcpy(r_0, b, n * sizeof(double));
 	cblas_dgemv(CblasRowMajor, CblasNoTrans, 
 		n, n, 
 		-1, a, n, 
 		x, 1, 
-		1, r, 1);
+		1, r_0, 1);
+	
+	printf("r_0 = \n");
+	print_vec(r_0, n);
 	
 	// writes beta = ||r||_2
-	double beta = cblas_dnrm2(n, r, 1);
+	double beta = cblas_dnrm2(n, r_0, 1);
 		
-	printf("beta = %lf", beta);
-	
-	double* v = calloc(n*(m+1) , sizeof(double));
 	// v[:, 0] = r / beta	
+	double* v = calloc(n*(m+1) , sizeof(double));
 	for (int i=0; i<n; i++){
-		v[i*(m+1) + 0] = r[i] / beta;
+		v[i*(m+1) + 0] = r_0[i] / beta;
 	}			
-	
-	printf("v = ");
-	print_vec(m+1, v);
-	
-	free(r);
+	free(r_0);
 		
 	double* h = calloc((m+1)*m, sizeof(double));
 	double* w = calloc(n, sizeof(double));
-	double* v_j = calloc(n , sizeof(double));
-	double* v_i = calloc(n , sizeof(double));
-
+	double* y = calloc((m+1) , sizeof(double));
+	y[0] = beta;
 	
-	
-	//int m_ = m;
 	for (int j=0; j<m; j++){ //cant paralellise this loop
-		
+		printf("w = \n");
+		print_vec(w, n);
 		// writes w = A @ v[:, j]
-		for (int k=0; k<n; k++){
-			v_j[k] = v[k*(m+1) + j];
-		} 
 		cblas_dgemv(CblasRowMajor, CblasNoTrans,
 			n, n, 1, a, n,  
-			v_j, 1, 
+			&(v[j]), m+1, 
 			0, w, 1);			 
 		
-		for (int i=0; i<j; i++){ // parallelise this?
-			for (int k=0; k<n; k++){
-				v_i[k] = v[k*(m+1) + i];
-			} 
-			h[i*m + j] = cblas_ddot(n, w, 1, v_i, 1); // h[i, j] = w.T @ v[:, i] 
-			cblas_daxpy(n, -h[i*m + j], v_i, 1, w, 1); // w = w - h[i, j] * v[:, i]
+		printf("w = \n");
+		print_vec(w, n);
+
+		for (int i=0; i<=j; i++){ // parallelise this?
+			h[i*m + j] = cblas_ddot(n, w, 1, &(v[i]), m+1);  // h[i, j] = w.T @ v[:, i] 
+			cblas_daxpy(n, -h[i*m + j], &(v[i]), m+1, w, 1); // w = w - h[i, j] * v[:, i]
 		}
 		
 		h[(j+1)*m + j] = cblas_dnrm2(n, w, 1);
-		if (h[(j+1)*m + j] == 0){
+		if (fabs(h[(j+1)*m + j]) < 1e-14){
 			m = j;
 			break;	
 		} 
@@ -90,43 +72,19 @@ void serial_gmres(double* a, int n, double* b, int m, double* x){
 		// parallelise this?
 		for (int i=0; i<n; i++){
 			v[i*(m+1) + (j+1)] = w[i] / h[(j+1)*m + j];
-		}
-	}
 
-	printf("h = ");
-	print_vec(m, h);
-	
-	free(v_j);
-	free(v_i);
-	free(w);
-
-	double* y_m = malloc((m+1) * sizeof(double));
-	y_m[0] = beta;
-	
-	LAPACKE_dgels(LAPACK_ROW_MAJOR, 'N', m+1, m, 1, h, m, y_m, 1);
-	
-	printf("y_m = ");
-	print_vec(m+1, y_m);
-	
-	free(h);	
-
-	double* v_m = calloc(n * m , sizeof(double));
-	for (int i=0; i<n; i++){
-		for (int j=0; j<m; j++){
-			v_m[i*m + j] = v[i*(m+1) + j];
-		}
-	}
-	
-	
-	// x = x + v[:, :m] @ y_m
-	cblas_dgemv(CblasRowMajor, CblasNoTrans,
-		n, m, 1, v_m, m,
-		y_m, 1,
-		1, x, 1);
+		LAPACKE_dgels(LAPACK_ROW_MAJOR, 'N', j+2, j+1, 1, h, m, y, 1);
 		
-	
+		// x = v[:, :m] @ y
+		cblas_dgemv(CblasRowMajor, CblasNoTrans,
+			n, j+1, 1, v, m+1,
+			y, 1,
+			0, x, 1);
+		}
+	}
 
-	free(y_m);
-	free(v_m);
+	free(y);
+	free(h);
+	free(w);
 	free(v);
 }
